@@ -6,9 +6,12 @@
 
 using namespace std;
 
+class IReader {
+public:
+    virtual std::string Read(const std::string& filePath) = 0;
+};
 
-
-class Reader{
+class Reader : public IReader{
 public:
     string Read(const string& filePath);
 };

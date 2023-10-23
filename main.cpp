@@ -5,15 +5,14 @@
 #include "Reader.h"
 #include "NormalMode.h"
 #include "SecretMode.h"
+#include "LinkedList.h"
 
 using namespace std;
 
-typedef string (*encrypt_ptr_t)(string, int);
-typedef string (*decrypt_ptr_t)(string, int);
-
-
 int main() {
-    int number;
+    LinkedList list;
+    int commandNumber;
+
     HMODULE handle = LoadLibrary(TEXT("libCaesar.dll"));
 
     if (handle == nullptr) {
@@ -21,8 +20,8 @@ int main() {
         return 1;
     }
 
-    encrypt_ptr_t encrypt_ptr = (encrypt_ptr_t)GetProcAddress(handle, "encrypt");
-    decrypt_ptr_t decrypt_ptr = (decrypt_ptr_t)GetProcAddress(handle, "decrypt");
+    encrypt_ptr_t encrypt_ptr = (encrypt_ptr_t) GetProcAddress(handle, "encrypt");
+    decrypt_ptr_t decrypt_ptr = (decrypt_ptr_t) GetProcAddress(handle, "decrypt");
 
     if (encrypt_ptr == nullptr || decrypt_ptr == nullptr) {
         cout << "Functions not found in DLL" << endl;
@@ -37,14 +36,55 @@ int main() {
 
 
     while (true) {
-        cout << "What do you want to do?\n";
-        cout << "1 - Normal mode\n";
-        cout << "2 - Secret mode\n";
-        cout << "3 - Exit\n";
-        cin >> number;
-
-        switch (number) {
-            case 1: // Normal mode
+        cout << "Choose the command:" << endl;
+        cin >> commandNumber;
+        switch (commandNumber) {
+            case 1:
+                list.appendText();
+                break;
+            case 2:
+                list.addNewLine();
+                break;
+            case 3:
+                list.saveToFile();
+                break;
+            case 4:
+                list.readFromFile();
+                break;
+            case 5:
+                list.displayList();
+                break;
+            case 6:
+                list.insertTextAtPosition();
+                break;
+            case 7:
+                list.searchSubstring();
+                break;
+            case 8:
+                list.Delete();
+                break;
+            case 9:
+                list.undo();
+                break;
+            case 10:
+                list.redo();
+                break;
+            case 11:
+                list.Cut();
+                break;
+            case 12:
+                list.Paste();
+                break;
+            case 13:
+                list.Copy();
+                break;
+            case 14:
+                list.InsertWithReplacement();
+                break;
+            case 15:
+                list.cursor();
+                break;
+            case 16:
                 int chosenOperation;
                 cout << "Choose the operation:\n";
                 cout << "1 - Encrypt\n";
@@ -61,13 +101,11 @@ int main() {
                     default:
                         break;
                 }
-                break;
-
-            case 2: // Secret mode
+            case 17:
                 secretMode.HandleSecretEncrypt();
                 break;
             default:
                 return 0;
+                }
         }
     }
-}
